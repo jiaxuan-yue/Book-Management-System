@@ -1,0 +1,18 @@
+# IDE
+.idea/
+
+# Java build
+**/target/
+
+# Node modules
+**/node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Package lock (root level)
+/package-lock.json
+
+# Logs
+*.log

@@ -48,17 +48,21 @@ const handleFileUpload = (res) => {
 
 const emit = defineEmits(['updateUser'])
 const update = () => {
+  let url = ''
   if (data.user.role === 'ADMIN') {
-    request.put('/admin/update', data.user).then(res => {
-      if (res.code === '200') {
-        ElMessage.success('保存成功')
-        localStorage.setItem('xm-user', JSON.stringify(data.user))
-        emit('updateUser')
-      } else {
-        ElMessage.error(res.msg)
-      }
-    })
+    url = '/admin/update'
+  } else if (data.user.role === 'USER') {
+    url = '/user/update'
   }
+  request.put(url, data.user).then(res => {
+    if (res.code === '200') {
+      ElMessage.success('保存成功')
+      localStorage.setItem('xm-user', JSON.stringify(data.user))
+      emit('updateUser')
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
 }
 </script>
 

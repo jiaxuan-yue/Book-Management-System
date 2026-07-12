@@ -25,7 +25,7 @@
             <el-icon><HomeFilled /></el-icon>
             <span>系统首页</span>
           </el-menu-item>
-          <el-sub-menu index="user">
+          <el-sub-menu index="user" v-if="data.user.role === 'ADMIN'">
             <template #title>
               <el-icon><Memo /></el-icon>
               <span>用户管理</span>
@@ -33,6 +33,10 @@
             <el-menu-item index="/manager/admin">
               <el-icon><User /></el-icon>
               <span>管理员信息</span>
+            </el-menu-item>
+            <el-menu-item index="/manager/user">
+              <el-icon><User /></el-icon>
+              <span>用户信息</span>
             </el-menu-item>
           </el-sub-menu>
           <el-menu-item index="/manager/person">

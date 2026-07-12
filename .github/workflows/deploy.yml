@@ -1,0 +1,67 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 设置 JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # 3. 构建 Spring Boot 后端
+      - name: Build Backend
+        working-directory: free_system/springboot
+        run: mvn clean package -DskipTests
+
+      # 4. 设置 Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: free_system/vue/package-lock.json
+
+      # 5. 构建 Vue 前端
+      - name: Build Frontend
+        working-directory: free_system/vue
+        run: |
+          npm install
+          npm run build
+
+      # 6. 通过 SCP 传输文件到服务器
+      - name: Deploy to Server via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT || 22 }}
+          source: "free_system/springboot/target/springboot-0.0.1-SNAPSHOT.jar,free_system/vue/dist/*,free_system.sql,deploy.sh"
+          target: ${{ secrets.DEPLOY_PATH }}
+          strip_components: 0
+
+      # 7. SSH 到服务器执行部署脚本
+      - name: Run Deploy Script on Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT || 22 }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+            chmod +x deploy.sh
+            bash deploy.sh
