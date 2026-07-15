@@ -5,7 +5,7 @@
 <mapper namespace="com.example.mapper.UserMapper">
 
     <select id="selectAll" resultType="com.example.entity.User">
-        select * from user
+        select * from `user`
         <where>
             <if test="name != null"> and name like concat('%', #{name}, '%')</if>
         </where>
@@ -13,12 +13,12 @@
     </select>
 
     <insert id="insert" parameterType="com.example.entity.User" useGeneratedKeys="true">
-        insert into user(id, username, password, name, avatar, role)
+        insert into `user`(id, username, password, name, avatar, role)
         values (#{id}, #{username}, #{password}, #{name}, #{avatar}, #{role})
     </insert>
 
     <update id="updateById" parameterType="com.example.entity.User">
-        update user set username = #{username}, password = #{password}, name = #{name}, avatar = #{avatar}, role = #{role}
+        update `user` set username = #{username}, password = #{password}, name = #{name}, avatar = #{avatar}, role = #{role}
         where id = #{id}
     </update>
 

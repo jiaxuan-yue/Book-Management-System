@@ -55,6 +55,6 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'user', 'user', '用户', 'http://localhost:9090/files/download/avatar.png', 'USER');
+INSERT INTO `user` VALUES (1, 'user', '123456', '用户', 'http://localhost:9090/files/download/avatar.png', 'USER');
 
 SET FOREIGN_KEY_CHECKS = 1;

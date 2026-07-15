@@ -30,7 +30,7 @@ public class UserService {
             throw new CustomException("用户已存在");
         }
         if (ObjectUtil.isEmpty(user.getPassword())) {
-            user.setPassword("user");
+            user.setPassword("123456");
         }
         if (ObjectUtil.isEmpty(user.getName())) {
             user.setName(user.getUsername());
