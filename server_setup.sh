@@ -17,19 +17,19 @@ echo "======================================"
 echo " 开始初始化服务器部署环境"
 echo "======================================"
 
-# 1. 安装 Java 17
-echo "[1/5] 安装 Java 17..."
+# 1. 安装 Java 21
+echo "[1/5] 安装 Java 21..."
 if command -v java &> /dev/null; then
     JAVA_VER=$(java -version 2>&1 | head -1)
     echo "  Java 已安装: $JAVA_VER"
 else
     if command -v apt-get &> /dev/null; then
         apt-get update -qq
-        apt-get install -y openjdk-17-jdk
+        apt-get install -y openjdk-21-jdk
     elif command -v yum &> /dev/null; then
-        yum install -y java-17-openjdk
+        yum install -y java-21-openjdk
     fi
-    echo "  Java 17 安装完成"
+    echo "  Java 21 安装完成"
 fi
 
 # 2. 安装 Nginx
