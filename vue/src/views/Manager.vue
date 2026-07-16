@@ -39,6 +39,14 @@
               <span>用户信息</span>
             </el-menu-item>
           </el-sub-menu>
+          <el-menu-item index="/manager/book" v-if="data.user.role === 'ADMIN'">
+            <el-icon><Reading /></el-icon>
+            <span>图书信息</span>
+          </el-menu-item>
+          <el-menu-item index="/manager/borrow" v-if="data.user.role === 'ADMIN'">
+            <el-icon><Notebook /></el-icon>
+            <span>借阅信息</span>
+          </el-menu-item>
           <el-menu-item index="/manager/person">
             <el-icon><User /></el-icon>
             <span>个人资料</span>
