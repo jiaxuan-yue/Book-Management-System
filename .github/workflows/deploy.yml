@@ -22,7 +22,7 @@ jobs:
 
       # 3. 构建 Spring Boot 后端
       - name: Build Backend
-        working-directory: free_system/springboot
+        working-directory: springboot
         run: mvn clean package -DskipTests
 
       # 4. 设置 Node.js 22（避免 Node 20 弃用警告）
@@ -33,7 +33,7 @@ jobs:
 
       # 5. 构建 Vue 前端
       - name: Build Frontend
-        working-directory: free_system/vue
+        working-directory: vue
         run: |
           npm install
           npm run build
@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "free_system/springboot/target/springboot-0.0.1-SNAPSHOT.jar,free_system/vue/dist,free_system.sql,deploy.sh"
+          source: "springboot/target/springboot-0.0.1-SNAPSHOT.jar,vue/dist,free_system.sql,deploy.sh"
           target: ${{ secrets.DEPLOY_PATH }}
           strip_components: 0
 

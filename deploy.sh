@@ -8,8 +8,8 @@ set -e
 # === 配置区域（根据你的服务器实际情况修改） ===
 DEPLOY_PATH="$(cd "$(dirname "$0")" && pwd)"
 JAR_NAME="springboot-0.0.1-SNAPSHOT.jar"
-JAR_PATH="$DEPLOY_PATH/free_system/springboot/target/$JAR_NAME"
-FRONTEND_PATH="$DEPLOY_PATH/free_system/vue/dist"
+JAR_PATH="$DEPLOY_PATH/springboot/target/$JAR_NAME"
+FRONTEND_PATH="$DEPLOY_PATH/vue/dist"
 NGINX_HTML_PATH="/usr/share/nginx/html"  # Nginx 静态文件目录，按实际修改
 BACKEND_PORT=9090
 LOG_FILE="$DEPLOY_PATH/app.log"
