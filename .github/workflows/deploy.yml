@@ -19,20 +19,17 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
 
       # 3. 构建 Spring Boot 后端
       - name: Build Backend
         working-directory: free_system/springboot
         run: mvn clean package -DskipTests
 
-      # 4. 设置 Node.js
+      # 4. 设置 Node.js 22（避免 Node 20 弃用警告）
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: free_system/vue/package-lock.json
+          node-version: '22'
 
       # 5. 构建 Vue 前端
       - name: Build Frontend
@@ -48,19 +45,19 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          port: ${{ secrets.SERVER_PORT || 22 }}
-          source: "free_system/springboot/target/springboot-0.0.1-SNAPSHOT.jar,free_system/vue/dist/*,free_system.sql,deploy.sh"
+          port: ${{ secrets.SERVER_PORT }}
+          source: "free_system/springboot/target/springboot-0.0.1-SNAPSHOT.jar,free_system/vue/dist,free_system.sql,deploy.sh"
           target: ${{ secrets.DEPLOY_PATH }}
           strip_components: 0
 
       # 7. SSH 到服务器执行部署脚本
       - name: Run Deploy Script on Server
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          port: ${{ secrets.SERVER_PORT || 22 }}
+          port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
             chmod +x deploy.sh
