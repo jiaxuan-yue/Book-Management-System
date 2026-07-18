@@ -12,9 +12,12 @@ JAR_PATH="$DEPLOY_PATH/springboot/target/$JAR_NAME"
 FRONTEND_PATH="$DEPLOY_PATH/vue/dist"
 BACKEND_PORT=9090
 DB_PASSWORD="root123456"
+DB_NAME="free_system"
+DB_USER="root"
 LOG_FILE="$DEPLOY_PATH/app.log"
 # 旧版 Nginx 站点配置（项目重构前路径）；脚本会优先把它切到 FRONTEND_PATH
 BOOK_NGINX_CONF="/etc/nginx/sites-available/book-management"
+MOCK_SQL="$DEPLOY_PATH/mock_data.sql"
 
 echo "=============================="
 echo " 开始部署 $(date '+%Y-%m-%d %H:%M:%S')"
@@ -45,8 +48,31 @@ detect_nginx_root() {
     echo ""
 }
 
+mysql_exec() {
+    mysql -u"$DB_USER" -p"$DB_PASSWORD" "$@"
+}
+
+# === 0. 数据库结构兼容 + 演示数据 ===
+echo "[1/6] 导入数据库演示数据..."
+if ! command -v mysql &> /dev/null; then
+    echo "  [错误] 未找到 mysql 客户端"
+    exit 1
+fi
+mysql_exec -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+# 旧库缺列时补齐（已存在则忽略报错）
+mysql_exec "$DB_NAME" -e "ALTER TABLE \`user\` ADD COLUMN \`account\` double(10,2) DEFAULT 0.00 COMMENT '钱包余额';" 2>/dev/null || true
+mysql_exec "$DB_NAME" -e "ALTER TABLE \`book\` ADD COLUMN \`price\` double(10,2) DEFAULT NULL COMMENT '价格';" 2>/dev/null || true
+mysql_exec "$DB_NAME" -e "ALTER TABLE \`book\` ADD COLUMN \`num\` int DEFAULT NULL COMMENT '库存';" 2>/dev/null || true
+
+if [ -f "$MOCK_SQL" ]; then
+    mysql_exec "$DB_NAME" < "$MOCK_SQL"
+    echo "  演示数据导入完成: $MOCK_SQL"
+else
+    echo "  [警告] 未找到 $MOCK_SQL，跳过灌数"
+fi
+
 # === 1. 部署后端 ===
-echo "[1/5] 停止旧的后端服务..."
+echo "[2/6] 停止旧的后端服务..."
 OLD_PIDS=$(ps aux | grep "$JAR_NAME" | grep -v grep | awk '{print $2}' || true)
 if [ -n "$OLD_PIDS" ]; then
     echo "$OLD_PIDS" | xargs -r kill
@@ -56,7 +82,7 @@ else
     echo "  没有找到运行中的后端进程"
 fi
 
-echo "[2/5] 启动新的后端服务..."
+echo "[3/6] 启动新的后端服务..."
 if [ ! -f "$JAR_PATH" ]; then
     echo "  [错误] 找不到 JAR 文件: $JAR_PATH"
     exit 1
@@ -68,7 +94,7 @@ nohup java -jar "$JAR_PATH" \
 echo "  后端已启动，日志: $LOG_FILE"
 
 # === 2. 部署前端 ===
-echo "[3/5] 部署前端静态文件..."
+echo "[4/6] 部署前端静态文件..."
 if [ ! -d "$FRONTEND_PATH" ]; then
     echo "  [错误] 前端构建目录不存在: $FRONTEND_PATH"
     exit 1
@@ -114,7 +140,7 @@ sudo nginx -s reload 2>/dev/null || sudo systemctl reload nginx
 echo "  Nginx 已重载，对外目录: $NGINX_HTML_PATH"
 
 # === 3. 校验前端是否真的更新 ===
-echo "[4/5] 校验前端部署结果..."
+echo "[5/6] 校验前端部署结果..."
 SERVED_INDEX="$NGINX_HTML_PATH/index.html"
 if [ ! -f "$SERVED_INDEX" ]; then
     echo "  [错误] 找不到对外 index.html: $SERVED_INDEX"
@@ -132,7 +158,7 @@ fi
 echo "  前端校验通过: $SERVED_JS"
 
 # === 4. 后端健康检查（失败则让 CI 变红） ===
-echo "[5/5] 后端健康检查..."
+echo "[6/6] 后端健康检查..."
 HTTP_CODE="000"
 for i in 1 2 3 4 5 6 7 8 9 10; do
     sleep 3
@@ -150,6 +176,9 @@ if [ "$HTTP_CODE" != "200" ]; then
     exit 1
 fi
 echo "  后端服务正常运行 (HTTP $HTTP_CODE)"
+
+BOOK_COUNT=$(mysql_exec -Nse "SELECT COUNT(*) FROM \`$DB_NAME\`.book" 2>/dev/null || echo "?")
+echo "  当前图书数量: $BOOK_COUNT"
 
 echo "=============================="
 echo " 部署完成 $(date '+%Y-%m-%d %H:%M:%S')"
