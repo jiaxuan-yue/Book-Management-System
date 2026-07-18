@@ -47,34 +47,37 @@ else
     echo "  Nginx 安装完成并已启动"
 fi
 
-# 3. 配置 Nginx
+# 3. 配置 Nginx（与 CI 部署目录 /home/app/vue/dist 保持一致）
 echo "[3/5] 配置 Nginx..."
-cat > /etc/nginx/conf.d/free_system.conf << 'NGINX'
+cat > /etc/nginx/sites-available/book-management << NGINX
 server {
     listen 80;
     server_name _;
 
-    # 前端静态文件
+    # 前端静态文件（直接指向 CI 上传的构建产物，避免拷错目录）
     location / {
-        root /usr/share/nginx/html;
+        root $DEPLOY_PATH/vue/dist;
         index index.html;
-        try_files $uri $uri/ /index.html;
+        try_files \$uri \$uri/ /index.html;
     }
 
     # 后端 API 反向代理
     location /api/ {
         proxy_pass http://localhost:9090/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     }
 
-    # 文件上传大小限制
     client_max_body_size 100m;
 }
 NGINX
+ln -sfn /etc/nginx/sites-available/book-management /etc/nginx/sites-enabled/book-management
+rm -f /etc/nginx/sites-enabled/default
+# 兼容旧的 conf.d 配置，避免抢端口
+rm -f /etc/nginx/conf.d/free_system.conf
 nginx -t 2>/dev/null && systemctl reload nginx
-echo "  Nginx 配置完成"
+echo "  Nginx 配置完成（root=$DEPLOY_PATH/vue/dist）"
 
 # 4. 创建部署目录
 echo "[4/5] 创建部署目录..."
