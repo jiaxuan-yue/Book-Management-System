@@ -47,6 +47,14 @@
             <el-icon><Notebook /></el-icon>
             <span>借阅信息</span>
           </el-menu-item>
+          <el-menu-item index="/manager/article">
+            <el-icon><Document /></el-icon>
+            <span>我的帖子</span>
+          </el-menu-item>
+          <el-menu-item index="/manager/articleAll" v-if="data.user.role === 'ADMIN'">
+            <el-icon><Document /></el-icon>
+            <span>帖子信息</span>
+          </el-menu-item>
           <el-menu-item index="/manager/person">
             <el-icon><User /></el-icon>
             <span>个人资料</span>

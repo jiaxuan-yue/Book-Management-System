@@ -16,6 +16,8 @@ const router = createRouter({
         { path: 'user', component: () => import('@/views/manager/User.vue')},
         { path: 'book', component: () => import('@/views/manager/Book.vue')},
         { path: 'borrow', component: () => import('@/views/manager/Borrow.vue')},
+        { path: 'article', component: () => import('@/views/manager/Article.vue')},
+        { path: 'articleAll', component: () => import('@/views/manager/ArticleAll.vue')},
       ]
     },
     {
@@ -24,7 +26,9 @@ const router = createRouter({
       children: [
         { path: 'home', component: () => import('@/views/front/Home.vue'),  },
         { path: 'person', component: () => import('@/views/front/Person.vue'),  },
-        { path: 'book', component: () => import('@/views/front/Book.vue'),  }
+        { path: 'book', component: () => import('@/views/front/Book.vue'),  },
+        { path: 'article', component: () => import('@/views/front/Article.vue'),  },
+        { path: 'articleDetail', component: () => import('@/views/front/ArticleDetail.vue'),  }
       ]
     },
     { path: '/login', component: () => import('@/views/Login.vue')},

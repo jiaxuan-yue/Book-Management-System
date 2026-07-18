@@ -1,6 +1,8 @@
 package com.example.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.Dict;
 import com.example.common.Result;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,9 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 文件相关操作接口
@@ -66,6 +71,30 @@ public class FileController {
         } catch (IOException e) {
             System.out.println("文件下载错误");
         }
+    }
+
+    /**
+     * wangEditor 编辑器文件上传接口
+     */
+    @PostMapping("/wang/upload")
+    public Map<String, Object> wangEditorUpload(MultipartFile file) {
+        String flag = System.currentTimeMillis() + "";
+        String fileName = file.getOriginalFilename();
+        try {
+            if (!FileUtil.isDirectory(filePath)) {
+                FileUtil.mkdir(filePath);
+            }
+            FileUtil.writeBytes(file.getBytes(), filePath + flag + "-" + fileName);
+            System.out.println(fileName + "--上传成功");
+            Thread.sleep(1L);
+        } catch (Exception e) {
+            System.err.println(fileName + "--文件上传失败");
+        }
+        String http = fileBaseUrl + "/files/download/";
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("errno", 0);
+        resMap.put("data", CollUtil.newArrayList(Dict.create().set("url", http + flag + "-" + fileName)));
+        return resMap;
     }
 
 }
