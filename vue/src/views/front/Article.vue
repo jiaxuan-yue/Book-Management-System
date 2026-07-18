@@ -1,3 +1,15 @@
+<!--
+  front/Article.vue —— 交流论坛页面（帖子列表）
+
+  功能说明：
+  - 以列表形式展示所有用户发布的帖子（每页 5 条）
+  - 每条帖子展示：封面图、标题、简介、作者头像和姓名、发布时间
+  - 点击封面图可跳转到帖子详情页（/front/articleDetail?id=xxx）
+  - 支持分页浏览
+
+  接口调用：
+  - GET /article/selectPage → 分页查询帖子列表（后端 LEFT JOIN 获取作者信息）
+-->
 <template>
   <div>
     <div style="margin: 20px auto; width: 40%">

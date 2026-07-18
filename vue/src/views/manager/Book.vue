@@ -1,6 +1,25 @@
+<!--
+  manager/Book.vue —— 图书信息管理页面
+
+  功能说明：
+  - 以分页表格展示所有图书列表（名称、封面、出版社、作者）
+  - 支持按书名模糊搜索
+  - 支持新增图书（弹窗表单，含封面图片上传）
+  - 支持编辑图书信息
+  - 支持删除图书（二次确认弹窗）
+  - 支持分页浏览
+
+  接口调用：
+  - GET    /book/selectPage  → 分页查询图书列表
+  - POST   /book/add         → 新增图书
+  - PUT    /book/update      → 修改图书信息
+  - DELETE /book/delete/{id} → 删除图书
+  - POST   /files/upload     → 上传图书封面图片
+-->
 <template>
   <div>
 
+    <!-- 搜索栏：按图书名称模糊搜索 + 查询/重置按钮 -->
     <div class="card" style="margin-bottom: 5px;">
       <el-input v-model="data.name" style="width: 300px; margin-right: 10px" placeholder="请输入名称查询"></el-input>
       <el-button type="primary" @click="load">查询</el-button>
@@ -20,6 +39,8 @@
         </el-table-column>
         <el-table-column label="出版社" prop="publishing"></el-table-column>
         <el-table-column label="作者" prop="author"></el-table-column>
+        <el-table-column label="价格" prop="price"></el-table-column>
+        <el-table-column label="库存" prop="num"></el-table-column>
         <el-table-column label="操作" align="center" width="160">
           <template #default="scope">
             <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
@@ -48,6 +69,12 @@
         </el-form-item>
         <el-form-item label="出版社" prop="publishing">
           <el-input v-model="data.form.publishing" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="价格" prop="price">
+          <el-input v-model="data.form.price" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="库存" prop="num">
+          <el-input v-model="data.form.num" autocomplete="off" />
         </el-form-item>
       </el-form>
       <template #footer>

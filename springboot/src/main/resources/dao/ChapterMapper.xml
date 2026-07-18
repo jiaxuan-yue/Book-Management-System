@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ChapterMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Chapter">
+        select chapter.*, book.name as bookName from `chapter`
+        left join `book` on chapter.book_id = book.id
+        <where>
+            <if test="name != null"> and chapter.name like concat('%', #{name}, '%')</if>
+            <if test="bookName != null"> and book.name like concat('%', #{bookName}, '%')</if>
+            <if test="bookId != null"> and chapter.book_id = #{bookId}</if>
+        </where>
+        order by chapter.id asc
+    </select>
+
+    <insert id="insert" parameterType="com.example.entity.Chapter" useGeneratedKeys="true">
+        insert into `chapter`(id, name, book_id)
+        values (#{id}, #{name}, #{bookId})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Chapter">
+        update `chapter` set name = #{name}, book_id = #{bookId}
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,6 +1,33 @@
+<!--
+  manager/Admin.vue —— 管理员信息管理页面
+
+  功能说明：
+  - 以分页表格展示所有管理员列表（用户名、名称、头像、角色）
+  - 支持按名称模糊搜索
+  - 支持新增管理员（弹窗表单，含头像上传）
+  - 支持编辑管理员信息（复用新增弹窗）
+  - 支持删除管理员（二次确认弹窗）
+  - 支持分页浏览
+
+  接口调用：
+  - GET    /admin/selectPage  → 分页查询管理员列表
+  - POST   /admin/add         → 新增管理员
+  - PUT    /admin/update      → 修改管理员信息
+  - DELETE /admin/delete/{id} → 删除管理员
+  - POST   /files/upload      → 上传管理员头像
+
+  页面通用模式说明（Admin、User、Book 页面采用相同的 CRUD 模式）：
+  - load()：分页查询数据，支持条件筛选
+  - handleAdd()：打开新增弹窗，清空表单
+  - handleEdit()：打开编辑弹窗，深拷贝当前行数据到表单
+  - save()：根据 form.id 是否存在判断是新增还是编辑
+  - handleDelete()：弹出确认对话框，确认后调用删除接口
+  - handleImgSuccess()：文件上传成功回调，将返回的 URL 赋值到表单字段
+-->
 <template>
   <div>
 
+    <!-- 搜索栏：按管理员名称模糊搜索 + 查询/重置按钮 -->
     <div class="card" style="margin-bottom: 5px;">
       <el-input v-model="data.name" style="width: 300px; margin-right: 10px" placeholder="请输入名称查询"></el-input>
       <el-button type="primary" @click="load">查询</el-button>

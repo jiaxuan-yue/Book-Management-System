@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    BookMapper.xml —— 图书表的 SQL 映射文件
+
+    本文件定义了以下 SQL 操作：
+    - selectAll:  条件查询所有图书（支持按书名模糊搜索）
+    - insert:     新增图书记录
+    - updateById: 根据 ID 修改图书信息
+-->
+<mapper namespace="com.example.dao.BookMapper">
+
+    <!--
+        条件查询所有图书
+        - 支持按书名模糊搜索（name like '%关键词%'）
+        - 按 ID 降序排列，最新添加的图书显示在最前面
+    -->
+    <select id="selectAll" resultType="com.example.entity.Book">
+        select * from `book`
+        <where>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <!--
+        新增图书
+        插入图书的封面图、书名、出版社、作者等信息
+    -->
+    <insert id="insert" parameterType="com.example.entity.Book" useGeneratedKeys="true">
+        insert into `book`(id, img, name, publishing, author, price, num)
+        values (#{id}, #{img}, #{name}, #{publishing}, #{author}, #{price}, #{num})
+    </insert>
+
+    <!--
+        根据 ID 修改图书信息
+        更新图书的封面、书名、出版社、作者、价格、库存
+    -->
+    <update id="updateById" parameterType="com.example.entity.Book">
+        update `book` set img = #{img}, name = #{name}, publishing = #{publishing}, author = #{author}, price = #{price}, num = #{num}
+        where id = #{id}
+    </update>
+
+</mapper>

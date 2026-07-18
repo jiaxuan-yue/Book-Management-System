@@ -1,3 +1,29 @@
+<!--
+  manager/Article.vue —— 我的帖子管理页面
+
+  功能说明：
+  - 以分页表格展示当前登录用户发布的所有帖子（仅显示自己的帖子）
+  - 支持按帖子标题模糊搜索
+  - 支持发布新帖子（弹窗表单，含封面上传、富文本编辑器编写正文）
+  - 支持编辑帖子（复用发布弹窗）
+  - 支持删除帖子（二次确认弹窗）
+  - 支持点击"查看"按钮弹窗预览帖子正文内容（HTML 渲染）
+
+  富文本编辑器：
+  - 使用 wangEditor 编辑器，支持图文混排
+  - 编辑器中的图片上传使用专用接口 /files/wang/upload
+  - 编辑器配置在 editorConfig 中设置图片上传地址
+
+  与 ArticleAll.vue 的区别：
+  - 本页面通过 userId 参数过滤，只显示当前用户的帖子
+  - ArticleAll.vue 显示所有帖子，且只有删除功能（无编辑）
+
+  接口调用：
+  - GET    /article/selectPage  → 分页查询帖子（带 userId 过滤）
+  - POST   /article/add         → 发布新帖子
+  - PUT    /article/update      → 修改帖子
+  - DELETE /article/delete/{id} → 删除帖子
+-->
 <template>
   <div>
     <div style="margin: 20px auto; width: 60%">

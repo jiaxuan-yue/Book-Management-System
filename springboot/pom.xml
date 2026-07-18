@@ -17,35 +17,51 @@
         <java.version>21</java.version>
     </properties>
     <dependencies>
+        <!-- ====== Spring Boot Web 启动器 ====== -->
+        <!-- 提供 Spring MVC、内嵌 Tomcat、JSON 处理等 Web 开发核心功能 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- ====== MyBatis 与 Spring Boot 整合 ====== -->
+        <!-- 提供 MyBatis ORM 框架的自动配置，支持注解和 XML 两种 SQL 映射方式 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>3.0.3</version>
         </dependency>
 
+        <!-- ====== MySQL 数据库驱动 ====== -->
+        <!-- MySQL 8.x 的 JDBC 驱动，scope=runtime 表示只在运行时使用 -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!--  hutool工具类 -->
+        <!-- ====== Hutool 工具类库 ====== -->
+        <!-- Java 工具集，本项目主要使用：
+             - ObjectUtil: 对象判空（isEmpty、isNotNull）
+             - DateUtil:   日期时间处理（now() 获取当前时间）
+             - FileUtil:   文件读写操作（writeBytes、readBytes、isDirectory、mkdir）
+             - CollUtil:   集合工具（newArrayList）
+             - Log:        日志记录 -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.25</version>
         </dependency>
 
-        <!-- 分页插件pagehelper -->
+        <!-- ====== PageHelper 分页插件 ====== -->
+        <!-- MyBatis 分页插件，在 Service 层调用 PageHelper.startPage(pageNum, pageSize) 后，
+             紧接着的查询会自动追加 LIMIT 语句实现分页，无需手动编写分页 SQL -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.4.6</version>
             <exclusions>
+                <!-- 排除自带的 mybatis 依赖，避免与 mybatis-spring-boot-starter 版本冲突 -->
                 <exclusion>
                     <groupId>org.mybatis</groupId>
                     <artifactId>mybatis</artifactId>

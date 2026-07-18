@@ -10,8 +10,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 借阅前端操作接口
- **/
+ * 借阅记录控制器 —— 提供借阅 CRUD 相关的 RESTful 接口
+ * <p>
+ * 所有接口路径以 {@code /borrow} 为前缀，对应数据库 borrow 表。
+ * <p>
+ * 接口列表：
+ * <ul>
+ *   <li>POST   /borrow/add            → 新增借阅记录（自动设置借阅时间）</li>
+ *   <li>DELETE /borrow/delete/{id}    → 根据 ID 删除借阅记录</li>
+ *   <li>PUT    /borrow/update         → 修改借阅信息（如更新借阅状态）</li>
+ *   <li>GET    /borrow/selectById/{id}→ 根据 ID 查询借阅详情</li>
+ *   <li>GET    /borrow/selectAll      → 查询所有借阅记录（支持按图书名称模糊搜索）</li>
+ *   <li>GET    /borrow/selectPage     → 分页查询借阅记录列表</li>
+ * </ul>
+ */
 @RestController
 @RequestMapping("/borrow")
 public class BorrowController {

@@ -10,8 +10,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 图书前端操作接口
- **/
+ * 图书控制器 —— 提供图书 CRUD 相关的 RESTful 接口
+ * <p>
+ * 所有接口路径以 {@code /book} 为前缀，对应数据库 book 表。
+ * <p>
+ * 接口列表：
+ * <ul>
+ *   <li>POST   /book/add            → 新增图书</li>
+ *   <li>DELETE /book/delete/{id}    → 根据 ID 删除图书</li>
+ *   <li>PUT    /book/update         → 修改图书信息</li>
+ *   <li>GET    /book/selectById/{id}→ 根据 ID 查询图书</li>
+ *   <li>GET    /book/selectAll      → 查询所有图书（支持按书名模糊搜索）</li>
+ *   <li>GET    /book/selectPage     → 分页查询图书列表</li>
+ * </ul>
+ */
 @RestController
 @RequestMapping("/book")
 public class BookController {

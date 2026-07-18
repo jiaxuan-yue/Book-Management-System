@@ -1,6 +1,26 @@
+<!--
+  manager/User.vue —— 用户信息管理页面
+
+  功能说明：
+  - 以分页表格展示所有普通用户列表（用户名、名称、头像、角色）
+  - 支持按名称模糊搜索
+  - 支持新增用户（弹窗表单，含头像上传）
+  - 支持编辑用户信息
+  - 支持删除用户（二次确认弹窗）
+  - 支持分页浏览
+
+  页面结构与 Admin.vue 完全一致，仅接口路径不同（/user/* 替代 /admin/*）。
+
+  接口调用：
+  - GET    /user/selectPage  → 分页查询用户列表
+  - POST   /user/add         → 新增用户
+  - PUT    /user/update      → 修改用户信息
+  - DELETE /user/delete/{id} → 删除用户
+-->
 <template>
   <div>
 
+    <!-- 搜索栏：按用户名称模糊搜索 + 查询/重置按钮 -->
     <div class="card" style="margin-bottom: 5px;">
       <el-input v-model="data.name" style="width: 300px; margin-right: 10px" placeholder="请输入名称查询"></el-input>
       <el-button type="primary" @click="load">查询</el-button>

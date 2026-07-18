@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    UserMapper.xml —— 用户表的 SQL 映射文件
+
+    本文件定义了以下 SQL 操作：
+    - selectAll:  条件查询所有用户（支持按姓名模糊搜索）
+    - insert:     新增用户记录
+    - updateById: 根据 ID 修改用户信息
+
+    与 AdminMapper.xml 结构完全一致，仅操作的表名不同（user vs admin）。
+    注意：user 是 MySQL 保留字，SQL 中需要用反引号 `user` 包裹表名。
+-->
+<mapper namespace="com.example.dao.UserMapper">
+
+    <!--
+        条件查询所有用户
+        - 支持按姓名模糊搜索
+        - 按 ID 降序排列
+    -->
+    <select id="selectAll" resultType="com.example.entity.User">
+        select * from `user`
+        <where>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <!--
+        新增用户
+        插入用户的用户名、密码、姓名、头像、角色标识
+    -->
+    <insert id="insert" parameterType="com.example.entity.User" useGeneratedKeys="true">
+        insert into `user`(id, username, password, name, avatar, role, account)
+        values (#{id}, #{username}, #{password}, #{name}, #{avatar}, #{role}, #{account})
+    </insert>
+
+    <!--
+        根据 ID 修改用户信息
+        更新用户的所有可修改字段
+    -->
+    <update id="updateById" parameterType="com.example.entity.User">
+        update `user` set username = #{username}, password = #{password}, name = #{name}, avatar = #{avatar}, role = #{role}, account = #{account}
+        where id = #{id}
+    </update>
+
+</mapper>

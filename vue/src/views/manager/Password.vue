@@ -1,3 +1,20 @@
+<!--
+  manager/Password.vue —— 修改密码页面（后台管理端）
+
+  功能说明：
+  - 提供修改密码表单：原密码、新密码、确认新密码
+  - 前端校验：新密码与确认密码必须一致，不一致则提示错误
+  - 修改成功后自动跳转到登录页面，要求用户使用新密码重新登录
+  - 同时将更新后的用户信息写入 localStorage
+
+  修改流程：
+  1. 用户输入原密码和新密码（两次确认）
+  2. 前端校验两次新密码是否一致
+  3. 调用 PUT /updatePassword 接口，后端验证原密码并更新
+  4. 成功后跳转到登录页
+
+  接口调用：PUT /updatePassword（统一接口，后端根据 role 分发）
+-->
 <template>
   <div style="width: 50%">
     <div class="card" style="padding: 30px">

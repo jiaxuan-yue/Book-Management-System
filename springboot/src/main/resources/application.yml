@@ -1,24 +1,42 @@
-server:
-  port: 9090
+# ============================================================
+# 图书管理系统 - 后端配置文件
+# 本文件是 Spring Boot 的核心配置文件，控制应用的各项行为
+# ============================================================
 
-# 数据库配置
+# ---------- 服务器配置 ----------
+server:
+  port: 9090   # 后端服务监听端口（前端 Vue 通过此端口访问后端接口）
+
+# ---------- 数据源配置 ----------
+# 配置 MySQL 数据库连接参数
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 8.x 的 JDBC 驱动类
+    username: root                                # 数据库用户名
+    password:                                     # 数据库密码（部署时在 deploy.sh 中覆盖）
     url: jdbc:mysql://localhost:3306/free_system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+    # URL 参数说明：
+    # - free_system:              数据库名称
+    # - useUnicode=true:          使用 Unicode 编码
+    # - characterEncoding=utf-8:  字符集设置为 UTF-8（支持中文）
+    # - allowMultiQueries=true:   允许一次执行多条 SQL
+    # - useSSL=false:             不使用 SSL 连接（本地开发无需加密）
+    # - serverTimezone=GMT+8:    时区设置为东八区（中国标准时间）
+
+  # ---------- 文件上传配置 ----------
   servlet:
     multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 100MB     # 单个上传文件的最大大小
+      max-request-size: 100MB  # 单次请求的最大大小（多个文件的总和）
 
-# 配置mybatis实体和xml映射
+# ---------- MyBatis 配置 ----------
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:dao/*.xml  # DAO XML 文件的位置（classpath 下的 dao 目录）
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 将 SQL 日志输出到控制台（方便调试）
+    map-underscore-to-camel-case: true  # 开启下划线转驼峰映射（如 user_id 自动映射为 userId）
 
-# 文件上传的前缀url
+# ---------- 自定义配置 ----------
+# 文件上传后返回给前端的 URL 前缀
+# 本地开发时使用 localhost，部署到服务器后改为服务器的公网 IP 或域名
 fileBaseUrl: http://localhost:9090

@@ -1,6 +1,27 @@
+<!--
+  manager/Borrow.vue —— 借阅信息管理页面
+
+  功能说明：
+  - 以分页表格展示所有借阅记录（图书名称、借阅用户、借阅时间、借阅状态）
+  - 支持按图书名称模糊搜索
+  - 支持"归还"操作：将借阅状态从"借阅中"更新为"已归还"
+  - 支持删除借阅记录（二次确认弹窗）
+  - 支持分页浏览
+  - 状态标签：借阅中（蓝色标签）、已归还（绿色标签）
+
+  与其他管理页面的区别：
+  - 没有新增和编辑功能（借阅记录由用户在前台发起）
+  - 额外提供"归还"按钮，管理员可以将图书标记为已归还
+
+  接口调用：
+  - GET    /borrow/selectPage  → 分页查询借阅记录
+  - PUT    /borrow/update      → 更新借阅状态（归还操作）
+  - DELETE /borrow/delete/{id} → 删除借阅记录
+-->
 <template>
   <div>
 
+    <!-- 搜索栏：按图书名称模糊搜索 + 查询/重置按钮 -->
     <div class="card" style="margin-bottom: 5px;">
       <el-input v-model="data.name" style="width: 300px; margin-right: 10px" placeholder="请输入图书名称查询"></el-input>
       <el-button type="primary" @click="load">查询</el-button>
