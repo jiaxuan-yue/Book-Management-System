@@ -12,6 +12,7 @@ JAR_PATH="$DEPLOY_PATH/springboot/target/$JAR_NAME"
 FRONTEND_PATH="$DEPLOY_PATH/vue/dist"
 NGINX_HTML_PATH="/usr/share/nginx/html"  # Nginx 静态文件目录，按实际修改
 BACKEND_PORT=9090
+DB_PASSWORD="root123456"
 LOG_FILE="$DEPLOY_PATH/app.log"
 
 echo "=============================="
@@ -33,6 +34,7 @@ echo "[2/4] 启动新的后端服务..."
 if [ -f "$JAR_PATH" ]; then
     nohup java -jar "$JAR_PATH" \
         --server.port=$BACKEND_PORT \
+        --spring.datasource.password=$DB_PASSWORD \
         > "$LOG_FILE" 2>&1 &
     echo "  后端已启动，日志: $LOG_FILE"
 else
