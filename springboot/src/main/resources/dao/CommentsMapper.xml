@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.CommentsMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Comments">
+        select comments.*, user.name as userName, user.avatar as userAvatar, article.title as relName from `comments`
+        left join `user` on comments.user_id = user.id
+        left join `article` on comments.rel_id = article.id
+        <where>
+            <if test="relName != null"> and article.title like concat('%', #{relName}, '%')</if>
+            <if test="content != null"> and comments.content like concat('%', #{content}, '%')</if>
+            <if test="userId != null"> and comments.user_id = #{userId}</if>
+            <if test="relId != null"> and comments.rel_id = #{relId}</if>
+            <if test="fid != null"> and comments.fid = #{fid}</if>
+        </where>
+        order by comments.id desc
+    </select>
+
+    <insert id="insert" parameterType="com.example.entity.Comments" useGeneratedKeys="true">
+        insert into `comments`(id, user_id, rel_id, time, content, fid)
+        values (#{id}, #{userId}, #{relId}, #{time}, #{content}, #{fid})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Comments">
+        update `comments` set user_id = #{userId}, rel_id = #{relId}, time = #{time}, content = #{content}, fid = #{fid}
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    BorrowMapper.xml —— 借阅记录表的 SQL 映射文件
+
+    本文件定义了以下 SQL 操作：
+    - selectAll:  条件查询所有借阅记录（关联查询借阅人和图书信息）
+    - insert:     新增借阅记录
+    - updateById: 根据 ID 修改借阅信息（如更新借阅状态）
+
+    借阅表通过两个外键关联：
+    - user_id → user.id（借阅用户）
+    - book_id → book.id（借阅图书）
+-->
+<mapper namespace="com.example.dao.BorrowMapper">
+
+    <!--
+        条件查询所有借阅记录（双表关联查询）
+        - LEFT JOIN user：关联用户表，获取借阅人的姓名（userName）
+        - LEFT JOIN book：关联图书表，获取借阅图书的书名（bookName）
+        - 支持按图书名称模糊搜索
+        - 按借阅记录 ID 降序排列（最新的借阅记录显示在最前面）
+    -->
+    <select id="selectAll" resultType="com.example.entity.Borrow">
+        select borrow.*, user.name as userName, book.name as bookName from `borrow`
+        left join `user` on borrow.user_id = user.id
+        left join `book` on borrow.book_id = book.id
+        <where>
+            <if test="bookName != null"> and book.name like concat('%', #{bookName}, '%')</if>
+        </where>
+        order by borrow.id desc
+    </select>
+
+    <!--
+        新增借阅记录
+        插入借阅用户ID、图书ID、借阅时间、借阅状态
+    -->
+    <insert id="insert" parameterType="com.example.entity.Borrow" useGeneratedKeys="true">
+        insert into `borrow`(id, user_id, book_id, time, status)
+        values (#{id}, #{userId}, #{bookId}, #{time}, #{status})
+    </insert>
+
+    <!--
+        根据 ID 修改借阅记录
+        可更新借阅人、借阅图书、借阅时间和借阅状态
+    -->
+    <update id="updateById" parameterType="com.example.entity.Borrow">
+        update `borrow` set user_id = #{userId}, book_id = #{bookId}, time = #{time}, status = #{status}
+        where id = #{id}
+    </update>
+
+</mapper>

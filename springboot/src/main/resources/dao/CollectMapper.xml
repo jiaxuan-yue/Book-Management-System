@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.CollectMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Collect">
+        select collect.*, user.name as userName, article.title as relName from `collect`
+        left join `user` on collect.user_id = user.id
+        left join `article` on collect.rel_id = article.id
+        <where>
+            <if test="relName != null"> and article.title like concat('%', #{relName}, '%')</if>
+            <if test="userId != null"> and collect.user_id = #{userId}</if>
+            <if test="relId != null"> and collect.rel_id = #{relId}</if>
+        </where>
+        order by collect.id desc
+    </select>
+
+    <insert id="insert" parameterType="com.example.entity.Collect" useGeneratedKeys="true">
+        insert into `collect`(id, user_id, rel_id, time)
+        values (#{id}, #{userId}, #{relId}, #{time})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Collect">
+        update `collect` set user_id = #{userId}, rel_id = #{relId}, time = #{time}
+        where id = #{id}
+    </update>
+
+</mapper>

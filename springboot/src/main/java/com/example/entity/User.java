@@ -1,8 +1,15 @@
 package com.example.entity;
 
 /**
- * 用户
-*/
+ * 普通用户实体类 —— 对应数据库 user 表
+ * <p>
+ * 继承自 {@link Account} 基类，拥有普通用户的全部属性。
+ * 与 Admin 类似，字段与父类重复定义并通过 {@code @Override} 重写 getter/setter，
+ * 确保 MyBatis 能正确映射查询结果。
+ * <p>
+ * 用户角色标识固定为 "USER"，在 {@code UserService.add()} 中自动设置。
+ * 普通用户可以浏览图书、申请借阅、发布帖子、管理个人资料等。
+ */
 public class User extends Account {
 
     /** ID */
@@ -17,6 +24,8 @@ public class User extends Account {
     private String avatar;
     /** 角色标识 */
     private String role;
+    /** 钱包余额 */
+    private Double account;
 
     @Override
     public Integer getId() {
@@ -76,5 +85,13 @@ public class User extends Account {
     @Override
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Double getAccount() {
+        return account;
+    }
+
+    public void setAccount(Double account) {
+        this.account = account;
     }
 }

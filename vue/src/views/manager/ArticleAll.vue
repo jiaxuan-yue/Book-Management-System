@@ -1,6 +1,25 @@
+<!--
+  manager/ArticleAll.vue —— 全部帖子信息管理页面（仅管理员可见）
+
+  功能说明：
+  - 以分页表格展示系统中所有用户发布的帖子
+  - 支持按帖子标题模糊搜索
+  - 支持删除帖子（管理员可删除任意用户的帖子）
+  - 支持点击"查看"按钮弹窗预览帖子正文内容（HTML 渲染）
+  - 不提供新增和编辑功能（帖子由用户自行发布和管理）
+
+  与 Article.vue 的区别：
+  - 本页面不传 userId 参数，查询所有帖子
+  - 只有删除功能，没有新增和编辑
+
+  接口调用：
+  - GET    /article/selectPage  → 分页查询所有帖子（无 userId 过滤）
+  - DELETE /article/delete/{id} → 删除帖子
+-->
 <template>
   <div>
 
+    <!-- 搜索栏：按帖子标题模糊搜索 + 查询/重置按钮 -->
     <div class="card" style="margin-bottom: 5px;">
       <el-input v-model="data.title" style="width: 300px; margin-right: 10px" placeholder="请输入帖子标题查询"></el-input>
       <el-button type="primary" @click="load">查询</el-button>

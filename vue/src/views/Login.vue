@@ -1,3 +1,23 @@
+<!--
+  Login.vue —— 登录页面组件
+
+  功能说明：
+  - 提供用户登录表单，包含账号、密码、角色选择三个字段
+  - 角色下拉框支持选择"管理员"或"用户"，默认为管理员
+  - 表单验证：账号和密码为必填项
+  - 登录成功后将用户信息存入 localStorage（key: 'system-user'），并跳转到后台管理首页
+  - 页面底部提供"注册"链接，引导未注册的用户前往注册页
+
+  登录流程：
+  1. 用户填写账号、密码，选择角色
+  2. 点击"登录"按钮，触发表单验证
+  3. 验证通过后调用 POST /login 接口
+  4. 后端验证成功后返回用户信息
+  5. 前端将用户信息序列化后存入 localStorage
+  6. 使用 router.push 跳转到 /manager/home 后台首页
+
+  接口调用：POST /login （通过 request.js 封装的 axios 发送请求）
+-->
 <template>
   <div class="login-container">
     <div class="login-box">
@@ -73,8 +93,9 @@
         request.post('/login', data.form).then(res => {
           if (res.code === '200') {
             ElMessage.success("登录成功")
-            router.push('/manager/home')
             localStorage.setItem('system-user', JSON.stringify(res.data))
+            localStorage.setItem('xm-user', JSON.stringify(res.data))
+            router.push('/manager/home')
           } else {
             ElMessage.error(res.msg)
           }

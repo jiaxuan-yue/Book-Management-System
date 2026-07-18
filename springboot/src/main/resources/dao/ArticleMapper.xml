@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ArticleMapper.xml —— 帖子表的 SQL 映射文件
+
+    本文件定义了以下 SQL 操作：
+    - selectAll:  条件查询所有帖子（支持按标题模糊搜索、按用户ID筛选），并关联查询发帖人信息
+    - insert:     新增帖子记录
+    - updateById: 根据 ID 修改帖子内容
+
+    注意：article 是 MySQL 保留字，SQL 中需要用反引号 `article` 包裹表名。
+-->
+<mapper namespace="com.example.dao.ArticleMapper">
+
+    <!--
+        条件查询所有帖子（关联查询发帖人信息）
+        - LEFT JOIN user：左连接用户表，获取发帖人的姓名和头像
+        - as userName / as userAvatar：给关联字段起别名，与 Article 实体类的属性名对应
+          （配合 application.yml 中的 map-underscore-to-camel-case=true 实现自动映射）
+        - 支持两个动态条件：
+          1. title：按标题模糊搜索
+          2. userId：按发帖用户ID精确筛选（用于"我的帖子"功能）
+    -->
+    <select id="selectAll" resultType="com.example.entity.Article">
+        select article.*, user.name as userName, user.avatar as userAvatar from `article`
+        left join `user` on article.user_id = user.id
+        <where>
+            <if test="title != null"> and title like concat('%', #{title}, '%')</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+        </where>
+        order by article.id desc
+    </select>
+
+    <!--
+        新增帖子
+        插入帖子标题、封面图、简介、发布时间、用户ID、正文内容、浏览量等字段
+    -->
+    <insert id="insert" parameterType="com.example.entity.Article" useGeneratedKeys="true">
+        insert into `article`(id, title, img, description, time, user_id, content, views)
+        values (#{id}, #{title}, #{img}, #{description}, #{time}, #{userId}, #{content}, #{views})
+    </insert>
+
+    <!--
+        根据 ID 修改帖子
+        更新帖子的所有可修改字段（标题、封面、简介、时间、内容、浏览量等）
+    -->
+    <update id="updateById" parameterType="com.example.entity.Article">
+        update `article` set title = #{title}, img = #{img}, description = #{description}, time = #{time}, user_id = #{userId}, content = #{content}, views = #{views}
+        where id = #{id}
+    </update>
+
+</mapper>

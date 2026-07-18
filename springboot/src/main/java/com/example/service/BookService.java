@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.entity.Book;
-import com.example.mapper.BookMapper;
+import com.example.dao.BookMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 图书业务处理
- **/
+ * 图书业务逻辑处理类
+ * <p>
+ * 负责图书信息的增删改查业务逻辑。
+ * 逻辑相对简单，主要是直接调用 Mapper 执行数据库操作，
+ * 没有复杂的业务校验。
+ */
 @Service
 public class BookService {
 

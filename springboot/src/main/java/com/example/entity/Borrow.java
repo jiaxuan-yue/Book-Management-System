@@ -1,8 +1,19 @@
 package com.example.entity;
 
 /**
- * 借阅信息
-*/
+ * 借阅记录实体类 —— 对应数据库 borrow 表
+ * <p>
+ * 用于记录用户的图书借阅信息，是图书管理系统的核心业务实体。
+ * <p>
+ * 数据库字段：id, user_id（借阅用户）, book_id（借阅图书）, time（借阅时间）, status（借阅状态）
+ * <p>
+ * 关联查询字段（非数据库字段，通过 LEFT JOIN 获得）：
+ * - userName：借阅用户的姓名（JOIN user 表）
+ * - bookName：借阅图书的名称（JOIN book 表）
+ * <p>
+ * 借阅流程：用户在前台选择图书 → 创建借阅记录 → 管理员在后台审核/管理借阅状态。
+ * 新增借阅记录时，borrowTime 由 BorrowService 自动设置为当前时间。
+ */
 public class Borrow {
 
     /** ID */

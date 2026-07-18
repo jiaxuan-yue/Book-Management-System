@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AdminMapper.xml —— 管理员表的 SQL 映射文件
+
+    namespace 对应 AdminMapper 接口的全限定名，MyBatis 通过 namespace + id 找到对应的 SQL。
+    本文件定义了以下 SQL 操作：
+    - selectAll:  条件查询所有管理员（支持按姓名模糊搜索）
+    - insert:     新增管理员记录
+    - updateById: 根据 ID 修改管理员信息
+
+    注意：deleteById 和 selectById 使用注解方式定义在 AdminMapper.java 接口中，无需在此文件中编写。
+-->
+<mapper namespace="com.example.dao.AdminMapper">
+
+    <!--
+        条件查询所有管理员
+        - <where> 标签：自动处理 WHERE 关键字和前导 AND/OR，如果内部条件都不满足则不生成 WHERE 子句
+        - <if> 标签：动态条件判断，只有当 name 不为 null 时才追加模糊搜索条件
+        - concat('%', #{name}, '%')：MySQL 字符串拼接函数，实现模糊匹配
+        - order by id desc：按 ID 降序排列（最新添加的管理员排在最前面）
+    -->
+    <select id="selectAll" resultType="com.example.entity.Admin">
+        select * from admin
+        <where>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <!--
+        新增管理员
+        - useGeneratedKeys="true"：使用数据库自增主键，插入后自动回填 id 到实体对象
+        - #{xxx}：MyBatis 参数占位符，从 Admin 实体对象的对应属性中取值（如 #{username} → admin.getUsername()）
+    -->
+    <insert id="insert" parameterType="com.example.entity.Admin" useGeneratedKeys="true">
+        insert into admin(id, username, password, name, avatar, role)
+        values (#{id}, #{username}, #{password}, #{name}, #{avatar}, #{role})
+    </insert>
+
+    <!--
+        根据 ID 修改管理员信息
+        会更新除 id 以外的所有字段
+    -->
+    <update id="updateById" parameterType="com.example.entity.Admin">
+        update admin set username = #{username}, password = #{password}, name = #{name}, avatar = #{avatar}, role = #{role}
+        where id = #{id}
+    </update>
+
+</mapper>

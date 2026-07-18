@@ -2,7 +2,7 @@ package com.example.service;
 
 import cn.hutool.core.date.DateUtil;
 import com.example.entity.Borrow;
-import com.example.mapper.BorrowMapper;
+import com.example.dao.BorrowMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -11,8 +11,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 借阅业务处理
- **/
+ * 借阅记录业务逻辑处理类
+ * <p>
+ * 负责图书借阅记录的增删改查业务逻辑，是图书管理系统的核心业务之一。
+ * <p>
+ * 新增借阅记录时会自动设置借阅时间为当前时间。
+ * 查询借阅记录时会通过 Mapper XML 的 LEFT JOIN 自动关联 user 表和 book 表，
+ * 获取借阅用户姓名和图书名称。
+ */
 @Service
 public class BorrowService {
 
@@ -20,7 +26,11 @@ public class BorrowService {
     private BorrowMapper borrowMapper;
 
     /**
-     * 新增
+     * 新增借阅记录
+     * <p>
+     * 自动设置借阅时间为当前时间，然后插入数据库。
+     *
+     * @param borrow 前端传入的借阅信息（userId、bookId、status）
      */
     public void add(Borrow borrow) {
         borrow.setTime(DateUtil.now());

@@ -1,8 +1,19 @@
 package com.example.entity;
 
 /**
- * 帖子信息
-*/
+ * 帖子实体类 —— 对应数据库 article 表
+ * <p>
+ * 用于存储用户发布的帖子/文章信息，支持交流论坛功能。
+ * <p>
+ * 数据库字段：id, title, img, description, time, user_id, content, views
+ * <p>
+ * 关联查询字段（非数据库字段，通过 LEFT JOIN user 表获得）：
+ * - userName：发帖用户的姓名
+ * - userAvatar：发帖用户的头像
+ * <p>
+ * 在 Mapper XML 中通过 LEFT JOIN 实现关联查询，
+ * 一次性获取帖子信息和发帖人的名称、头像，减少前端多次请求。
+ */
 public class Article {
 
     /** ID */
