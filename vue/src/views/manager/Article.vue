@@ -30,6 +30,7 @@
       <el-input v-model="data.title" style="width: 300px; margin-right: 10px" placeholder="请输入帖子标题查询"></el-input>
       <el-button type="primary" @click="load">查询</el-button>
       <el-button type="info" style="margin: 0 10px" @click="reset">重置</el-button>
+      <el-button type="success" @click="goFront">去论坛看全部帖子 / 收藏</el-button>
     </div>
     <div class="card" style="margin-bottom: 5px">
       <div style="margin-bottom: 10px">
@@ -113,6 +114,10 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 const uploadUrl = import.meta.env.VITE_BASE_URL + '/files/upload'
 const wangUploadUrl = import.meta.env.VITE_BASE_URL + '/files/wang/upload'
+
+const goFront = () => {
+  window.open('/front/article', '_blank')
+}
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('system-user') || '{}'),
