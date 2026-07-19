@@ -17,7 +17,7 @@
         <el-table-column label="章节名称" prop="chapterName" show-overflow-tooltip></el-table-column>
         <el-table-column label="图书内容" prop="content" show-overflow-tooltip>
           <template v-slot="scope">
-            <el-button type="info" @click="viewInit(scope.row.content)">点击查看</el-button>
+            <el-button type="info" size="small" @click="viewInit(scope.row.content)">点击查看</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="160">

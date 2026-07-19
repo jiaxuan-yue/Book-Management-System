@@ -38,7 +38,7 @@
         <el-table-column label="作者" prop="userName" width="120"></el-table-column>
         <el-table-column label="内容" prop="content" width="120" show-overflow-tooltip>
           <template v-slot="scope">
-            <el-button type="info" @click="viewInit(scope.row.content)">点击查看</el-button>
+            <el-button type="info" size="small" @click="viewInit(scope.row.content)">点击查看</el-button>
           </template>
         </el-table-column>
         <el-table-column label="浏览量" prop="views" width="90"></el-table-column>
