@@ -26,43 +26,41 @@
 -->
 <template>
   <div>
-    <div style="margin: 20px auto; width: 60%">
-      <div class="card" style="margin-bottom: 5px;">
-        <el-input v-model="data.title" style="width: 300px; margin-right: 10px" placeholder="请输入帖子标题查询"></el-input>
-        <el-button type="primary" @click="load">查询</el-button>
-        <el-button type="info" style="margin: 0 10px" @click="reset">重置</el-button>
+    <div class="card" style="margin-bottom: 5px;">
+      <el-input v-model="data.title" style="width: 300px; margin-right: 10px" placeholder="请输入帖子标题查询"></el-input>
+      <el-button type="primary" @click="load">查询</el-button>
+      <el-button type="info" style="margin: 0 10px" @click="reset">重置</el-button>
+    </div>
+    <div class="card" style="margin-bottom: 5px">
+      <div style="margin-bottom: 10px">
+        <el-button type="primary" @click="handleAdd">发布帖子</el-button>
       </div>
-      <div class="card" style="margin-bottom: 5px">
-        <div style="margin-bottom: 10px">
-          <el-button type="primary" @click="handleAdd">发布帖子</el-button>
-        </div>
-        <el-table :data="data.tableData" stripe tooltip-effect="dark" class="myEffect">
-          <el-table-column label="标题" prop="title" show-overflow-tooltip></el-table-column>
-          <el-table-column label="封面">
-            <template #default="scope">
-              <el-image :src="scope.row.img" style="width: 50px; height: 40px; border-radius: 5px"></el-image>
-            </template>
-          </el-table-column>
-          <el-table-column label="简介" prop="description" show-overflow-tooltip></el-table-column>
-          <el-table-column label="作者" prop="userName"></el-table-column>
-          <el-table-column label="内容" prop="content" show-overflow-tooltip>
-            <template v-slot="scope">
-              <el-button type="info" @click="viewInit(scope.row.content)">点击查看</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column label="浏览量" prop="views"></el-table-column>
-          <el-table-column label="发布时间" prop="time"></el-table-column>
-          <el-table-column label="操作" align="center" width="160">
-            <template #default="scope">
-              <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="card">
-        <el-pagination @current-change="load" background layout="total, prev, pager, next" v-model:page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total"/>
-      </div>
+      <el-table :data="data.tableData" stripe tooltip-effect="dark myEffect" style="width: 100%">
+        <el-table-column label="标题" prop="title" min-width="180" show-overflow-tooltip></el-table-column>
+        <el-table-column label="封面" width="100">
+          <template #default="scope">
+            <el-image :src="scope.row.img" style="width: 50px; height: 40px; border-radius: 5px"></el-image>
+          </template>
+        </el-table-column>
+        <el-table-column label="简介" prop="description" min-width="220" show-overflow-tooltip></el-table-column>
+        <el-table-column label="作者" prop="userName" width="120"></el-table-column>
+        <el-table-column label="内容" prop="content" width="120" show-overflow-tooltip>
+          <template v-slot="scope">
+            <el-button type="info" @click="viewInit(scope.row.content)">点击查看</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="浏览量" prop="views" width="90"></el-table-column>
+        <el-table-column label="发布时间" prop="time" width="180"></el-table-column>
+        <el-table-column label="操作" align="center" width="160">
+          <template #default="scope">
+            <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="card">
+      <el-pagination @current-change="load" background layout="total, prev, pager, next" v-model:page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total"/>
     </div>
     <el-dialog title="帖子信息" width="50%" v-model="data.formVisible" :close-on-click-modal="false" destroy-on-close>
       <el-form :model="data.form" label-width="100px" style="padding-right: 50px">
@@ -230,6 +228,7 @@ const reset = () => {
 }
 </script>
 <style>
+/* 仅限制悬浮提示气泡宽度，不要加到表格本身 */
 .myEffect {
   max-width: 30%;
 }
