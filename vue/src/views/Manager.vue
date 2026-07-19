@@ -88,6 +88,10 @@
             <el-icon><Document /></el-icon>
             <span>我的帖子</span>
           </el-menu-item>
+          <el-menu-item index="/front/article">
+            <el-icon><ChatDotRound /></el-icon>
+            <span>交流论坛</span>
+          </el-menu-item>
           <el-menu-item index="/manager/articleAll" v-if="data.user.role === 'ADMIN'">
             <el-icon><Document /></el-icon>
             <span>帖子信息</span>
