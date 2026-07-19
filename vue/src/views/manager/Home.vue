@@ -1,29 +1,37 @@
 <!--
   manager/Home.vue —— 后台管理系统首页
-
-  功能说明：
-  - 显示欢迎信息，展示当前登录用户的姓名
-  - 作为登录后台后的默认着陆页面
-
-  用户信息来源：从 localStorage 的 'system-user' 中读取登录时保存的用户信息
 -->
 <template>
   <div>
-
-    <!-- 欢迎卡片：展示当前登录用户的姓名和问候语 -->
-    <div class="card" style="line-height: 30px">
+    <div class="card" style="line-height: 30px; margin-bottom: 10px">
       <div>欢迎您，{{ data.user.name }} 祝您今天过得开心！</div>
     </div>
 
+    <div class="card" style="margin-bottom: 10px">
+      <div style="font-weight: bold; margin-bottom: 15px">进入前台</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <el-button type="primary" @click="goFront('/front/home')">前台首页</el-button>
+        <el-button type="success" @click="goFront('/front/book')">图书中心</el-button>
+        <el-button type="warning" @click="goFront('/front/article')">交流论坛</el-button>
+        <el-button type="info" @click="goFront('/front/orders')">我的订单</el-button>
+        <el-button @click="goFront('/front/comments')">我的评论</el-button>
+        <el-button @click="goFront('/front/person')">个人中心</el-button>
+      </div>
+      <div style="margin-top: 12px; color: #666; font-size: 13px">
+        收藏、评论、购书、在线阅读等功能都在前台使用
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { reactive } from "vue";
-import request from "@/utils/request";
 
-// 从 localStorage 读取当前登录用户的信息
 const data = reactive({
   user: JSON.parse(localStorage.getItem('system-user') || '{}'),
 })
+
+const goFront = (path) => {
+  window.open(path, '_blank')
+}
 </script>
