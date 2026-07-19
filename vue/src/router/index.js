@@ -68,15 +68,13 @@ const router = createRouter({
       ]
     },
 
-    // ---------- 用户业务页面（与 /manager 共用同一套侧边栏布局）----------
-    // 不再使用独立的 Front.vue，避免出现「两套前台」的错觉
+    // ---------- 前台业务页面（与 /manager 共用同一套侧边栏，仅此变更）----------
     {
       path: '/front',
       component: () => import('@/views/Manager.vue'),
-      redirect: '/manager/home',
       children: [
-        { path: 'home', redirect: '/manager/home' },
-        { path: 'person', redirect: '/manager/person' },
+        { path: 'home', component: () => import('@/views/front/Home.vue') },
+        { path: 'person', component: () => import('@/views/front/Person.vue') },
         { path: 'book', component: () => import('@/views/front/Book.vue') },
         { path: 'article', component: () => import('@/views/front/Article.vue') },
         { path: 'articleDetail', component: () => import('@/views/front/ArticleDetail.vue') },

@@ -67,7 +67,7 @@ import {ElMessage} from "element-plus";
 const baseUrl = import.meta.env.VITE_BASE_URL
 
 const data = reactive({
-  user: JSON.parse(localStorage.getItem('xm-user') || localStorage.getItem('system-user') || '{}'),
+  user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
   formVisible: false,
   type: null,
   recharge: 100,

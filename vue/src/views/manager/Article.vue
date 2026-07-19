@@ -116,7 +116,7 @@ const uploadUrl = import.meta.env.VITE_BASE_URL + '/files/upload'
 const wangUploadUrl = import.meta.env.VITE_BASE_URL + '/files/wang/upload'
 
 const goFront = () => {
-  router.push('/front/article')
+  window.open('/front/article', '_blank')
 }
 
 const data = reactive({
