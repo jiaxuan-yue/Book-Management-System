@@ -27,22 +27,22 @@
     </div>
 
     <div class="card" style="margin-bottom: 5px">
-      <el-table :data="data.tableData" stripe tooltip-effect="dark" class="myEffect">
-        <el-table-column label="标题" prop="title" show-overflow-tooltip></el-table-column>
-        <el-table-column label="封面">
+      <el-table :data="data.tableData" stripe tooltip-effect="dark myEffect" style="width: 100%">
+        <el-table-column label="标题" prop="title" min-width="180" show-overflow-tooltip></el-table-column>
+        <el-table-column label="封面" width="100">
           <template #default="scope">
             <el-image :src="scope.row.img" style="width: 50px; height: 40px; border-radius: 5px"></el-image>
           </template>
         </el-table-column>
-        <el-table-column label="简介" prop="description" show-overflow-tooltip></el-table-column>
-        <el-table-column label="作者" prop="userName"></el-table-column>
-        <el-table-column label="内容" prop="content" show-overflow-tooltip>
+        <el-table-column label="简介" prop="description" min-width="220" show-overflow-tooltip></el-table-column>
+        <el-table-column label="作者" prop="userName" width="120"></el-table-column>
+        <el-table-column label="内容" prop="content" width="120" show-overflow-tooltip>
           <template v-slot="scope">
             <el-button type="info" @click="viewInit(scope.row.content)">点击查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="浏览量" prop="views"></el-table-column>
-        <el-table-column label="发布时间" prop="time"></el-table-column>
+        <el-table-column label="浏览量" prop="views" width="90"></el-table-column>
+        <el-table-column label="发布时间" prop="time" width="180"></el-table-column>
         <el-table-column label="操作" align="center" width="160">
           <template #default="scope">
             <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
@@ -115,6 +115,7 @@ const reset = () => {
 load()
 </script>
 <style>
+/* 仅限制悬浮提示气泡宽度，不要加到表格本身 */
 .myEffect {
   max-width: 30%;
 }
