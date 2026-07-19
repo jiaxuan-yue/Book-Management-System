@@ -68,7 +68,7 @@ import {ElMessage} from "element-plus";
 import router from "@/router";
 
 const data = reactive({
-  user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
+  user: JSON.parse(localStorage.getItem('xm-user') || localStorage.getItem('system-user') || '{}'),
   articleId: router.currentRoute.value.query.id,
   articleData: {},
   collectFlag: false,

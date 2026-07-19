@@ -68,20 +68,21 @@ const router = createRouter({
       ]
     },
 
-    // ---------- 前台展示模块 ----------
-    // Front.vue 提供顶部导航栏 + 内容区域的布局框架
+    // ---------- 用户业务页面（与 /manager 共用同一套侧边栏布局）----------
+    // 不再使用独立的 Front.vue，避免出现「两套前台」的错觉
     {
       path: '/front',
-      component: () => import('@/views/Front.vue'),
+      component: () => import('@/views/Manager.vue'),
+      redirect: '/manager/home',
       children: [
-        { path: 'home', component: () => import('@/views/front/Home.vue'),  },           // 前台首页
-        { path: 'person', component: () => import('@/views/front/Person.vue'),  },       // 个人中心
-        { path: 'book', component: () => import('@/views/front/Book.vue'),  },           // 图书中心
-        { path: 'article', component: () => import('@/views/front/Article.vue'),  },     // 交流论坛
-        { path: 'articleDetail', component: () => import('@/views/front/ArticleDetail.vue'),  }, // 帖子详情
-        { path: 'comments', component: () => import('@/views/front/Comments.vue'),  },   // 我的评论
-        { path: 'orders', component: () => import('@/views/front/Orders.vue'),  },       // 我的订单
-        { path: 'contentDetail', component: () => import('@/views/front/ContentDetail.vue'),  }, // 在线阅读
+        { path: 'home', redirect: '/manager/home' },
+        { path: 'person', redirect: '/manager/person' },
+        { path: 'book', component: () => import('@/views/front/Book.vue') },
+        { path: 'article', component: () => import('@/views/front/Article.vue') },
+        { path: 'articleDetail', component: () => import('@/views/front/ArticleDetail.vue') },
+        { path: 'comments', component: () => import('@/views/front/Comments.vue') },
+        { path: 'orders', component: () => import('@/views/front/Orders.vue') },
+        { path: 'contentDetail', component: () => import('@/views/front/ContentDetail.vue') },
       ]
     },
 

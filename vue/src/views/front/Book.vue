@@ -58,7 +58,7 @@ import {reactive} from "vue";
 import {ElMessage} from "element-plus";
 
 const data = reactive({
-  user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
+  user: JSON.parse(localStorage.getItem('xm-user') || localStorage.getItem('system-user') || '{}'),
   pageNum: 1,
   pageSize: 12,
   total: 0,
