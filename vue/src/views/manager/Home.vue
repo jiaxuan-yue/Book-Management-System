@@ -34,7 +34,7 @@ const data = reactive({
     { title: '我的帖子', path: '/manager/article', desc: '发布和管理自己的帖子' },
     { title: '我的订单', path: '/front/orders', desc: '查看购书订单、确认收货' },
     { title: '我的评论', path: '/front/comments', desc: '管理自己发表的评论' },
-    { title: '个人中心', path: '/front/person', desc: '资料修改、钱包充值' },
+    { title: '个人资料', path: '/manager/person', desc: '资料修改、钱包充值' },
   ]
 })
 

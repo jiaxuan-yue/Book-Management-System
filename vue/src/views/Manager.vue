@@ -84,6 +84,10 @@
             <el-icon><Notebook /></el-icon>
             <span>借阅信息</span>
           </el-menu-item>
+          <el-menu-item index="/front/book">
+            <el-icon><Reading /></el-icon>
+            <span>图书中心</span>
+          </el-menu-item>
           <el-menu-item index="/manager/article">
             <el-icon><Document /></el-icon>
             <span>我的帖子</span>
@@ -91,6 +95,14 @@
           <el-menu-item index="/front/article">
             <el-icon><ChatDotRound /></el-icon>
             <span>交流论坛</span>
+          </el-menu-item>
+          <el-menu-item index="/front/orders">
+            <el-icon><ShoppingCart /></el-icon>
+            <span>我的订单</span>
+          </el-menu-item>
+          <el-menu-item index="/front/comments">
+            <el-icon><ChatDotRound /></el-icon>
+            <span>我的评论</span>
           </el-menu-item>
           <el-menu-item index="/manager/articleAll" v-if="data.user.role === 'ADMIN'">
             <el-icon><Document /></el-icon>
@@ -152,6 +164,7 @@ const updateUser = () => {
 const logout = () => {
   ElMessage.success('退出成功')
   localStorage.removeItem('system-user')
+  localStorage.removeItem('xm-user')
   router.push('/login')
 }
 </script>
