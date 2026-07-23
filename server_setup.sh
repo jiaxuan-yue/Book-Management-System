@@ -4,23 +4,20 @@
 # =============================================
 # 用法：
 #   1. 上传此脚本到服务器：scp server_setup.sh root@你的IP:/tmp/
-#   2. SSH 登录服务器：ssh root@你的IP
-#   3. 执行脚本：bash /tmp/server_setup.sh
+#   2. 登录服务器执行：bash /tmp/server_setup.sh
+#   SSH / Secrets 配置见仓库根目录 deploy.config.example（唯一配置入口）
 # =============================================
 
 set -e
 
 DEPLOY_PATH="/home/app"
-# 部署公钥：执行前请改成你本机 ~/.ssh/deploy_key_book_mgmt.pub 的完整一行
-# 切勿把私钥写进本脚本或提交到 Git
-SSH_PUB_KEY="${SSH_PUB_KEY:-}"
 
 echo "======================================"
 echo " 开始初始化服务器部署环境"
 echo "======================================"
 
 # 1. 安装 Java 21
-echo "[1/5] 安装 Java 21..."
+echo "[1/4] 安装 Java 21..."
 if command -v java &> /dev/null; then
     JAVA_VER=$(java -version 2>&1 | head -1)
     echo "  Java 已安装: $JAVA_VER"
@@ -35,7 +32,7 @@ else
 fi
 
 # 2. 安装 Nginx
-echo "[2/5] 安装 Nginx..."
+echo "[2/4] 安装 Nginx..."
 if command -v nginx &> /dev/null; then
     echo "  Nginx 已安装"
 else
@@ -50,7 +47,7 @@ else
 fi
 
 # 3. 配置 Nginx（与 CI 部署目录 /home/app/vue/dist 保持一致）
-echo "[3/5] 配置 Nginx..."
+echo "[3/4] 配置 Nginx..."
 cat > /etc/nginx/sites-available/book-management << NGINX
 server {
     listen 80;
@@ -82,23 +79,9 @@ nginx -t 2>/dev/null && systemctl reload nginx
 echo "  Nginx 配置完成（root=$DEPLOY_PATH/vue/dist）"
 
 # 4. 创建部署目录
-echo "[4/5] 创建部署目录..."
+echo "[4/4] 创建部署目录..."
 mkdir -p "$DEPLOY_PATH"
 echo "  目录已创建: $DEPLOY_PATH"
-
-# 5. 配置 SSH 密钥
-echo "[5/5] 配置 SSH 密钥..."
-mkdir -p ~/.ssh
-chmod 700 ~/.ssh
-if [ -z "$SSH_PUB_KEY" ]; then
-    echo "  跳过：未设置 SSH_PUB_KEY（例：SSH_PUB_KEY=\"\$(cat ~/.ssh/deploy_key_book_mgmt.pub)\" bash server_setup.sh）"
-elif ! grep -Fq "$SSH_PUB_KEY" ~/.ssh/authorized_keys 2>/dev/null; then
-    echo "$SSH_PUB_KEY" >> ~/.ssh/authorized_keys
-    chmod 600 ~/.ssh/authorized_keys
-    echo "  SSH 公钥已添加"
-else
-    echo "  SSH 公钥已存在"
-fi
 
 echo "======================================"
 echo " 服务器初始化完成！"
@@ -108,7 +91,7 @@ echo " Java 版本: $(java -version 2>&1 | head -1)"
 echo " Nginx 状态: $(systemctl is-active nginx)"
 echo ""
 echo " 接下来："
-echo " 1. 在 GitHub 仓库配置 Secrets（见 DEPLOY_GUIDE.md）"
+echo " 1. SSH / GitHub Secrets 统一见仓库根目录 deploy.config.example"
 echo " 2. 在 MySQL 中执行 free_system.sql 创建 user 表"
 echo " 3. git push 到 main 分支触发自动部署"
 echo "======================================"
