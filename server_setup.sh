@@ -5,7 +5,6 @@
 # 用法：
 #   1. 上传此脚本到服务器：scp server_setup.sh root@你的IP:/tmp/
 #   2. 登录服务器执行：bash /tmp/server_setup.sh
-#   SSH / Secrets 配置见仓库根目录 deploy.config.example（唯一配置入口）
 # =============================================
 
 set -e
@@ -91,7 +90,7 @@ echo " Java 版本: $(java -version 2>&1 | head -1)"
 echo " Nginx 状态: $(systemctl is-active nginx)"
 echo ""
 echo " 接下来："
-echo " 1. SSH / GitHub Secrets 统一见仓库根目录 deploy.config.example"
-echo " 2. 在 MySQL 中执行 free_system.sql 创建 user 表"
+echo " 1. 在 MySQL 中执行 free_system.sql"
+echo " 2. 按 springboot/src/main/resources/application.yml 配置数据库后启动"
 echo " 3. git push 到 main 分支触发自动部署"
 echo "======================================"
