@@ -11,7 +11,9 @@
 set -e
 
 DEPLOY_PATH="/home/app"
-SSH_PUB_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDnnSACEzLacO92/xk+eWPrv/8XM4tt2FE2zKzktdvBI github-actions-deploy"
+# 部署公钥：执行前请改成你本机 ~/.ssh/deploy_key_book_mgmt.pub 的完整一行
+# 切勿把私钥写进本脚本或提交到 Git
+SSH_PUB_KEY="${SSH_PUB_KEY:-}"
 
 echo "======================================"
 echo " 开始初始化服务器部署环境"
@@ -88,7 +90,9 @@ echo "  目录已创建: $DEPLOY_PATH"
 echo "[5/5] 配置 SSH 密钥..."
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
-if ! grep -q "github-actions-deploy" ~/.ssh/authorized_keys 2>/dev/null; then
+if [ -z "$SSH_PUB_KEY" ]; then
+    echo "  跳过：未设置 SSH_PUB_KEY（例：SSH_PUB_KEY=\"\$(cat ~/.ssh/deploy_key_book_mgmt.pub)\" bash server_setup.sh）"
+elif ! grep -Fq "$SSH_PUB_KEY" ~/.ssh/authorized_keys 2>/dev/null; then
     echo "$SSH_PUB_KEY" >> ~/.ssh/authorized_keys
     chmod 600 ~/.ssh/authorized_keys
     echo "  SSH 公钥已添加"
