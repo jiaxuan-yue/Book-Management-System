@@ -1,42 +1,35 @@
 # ============================================================
 # 图书管理系统 - 后端配置文件
-# 本文件是 Spring Boot 的核心配置文件，控制应用的各项行为
 # ============================================================
 
-# ---------- 服务器配置 ----------
 server:
-  port: 9090   # 后端服务监听端口（前端 Vue 通过此端口访问后端接口）
+  port: 9090
 
-# ---------- 数据源配置 ----------
-# 配置 MySQL 数据库连接参数
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 8.x 的 JDBC 驱动类
-    username: root                                # 数据库用户名
-    password:                                     # 数据库密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
     url: jdbc:mysql://localhost:3306/free_system?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
-    # URL 参数说明：
-    # - free_system:              数据库名称
-    # - useUnicode=true:          使用 Unicode 编码
-    # - characterEncoding=utf-8:  字符集设置为 UTF-8（支持中文）
-    # - allowMultiQueries=true:   允许一次执行多条 SQL
-    # - useSSL=false:             不使用 SSL 连接（本地开发无需加密）
-    # - serverTimezone=GMT+8:    时区设置为东八区（中国标准时间）
-
-  # ---------- 文件上传配置 ----------
   servlet:
     multipart:
-      max-file-size: 100MB     # 单个上传文件的最大大小
-      max-request-size: 100MB  # 单次请求的最大大小（多个文件的总和）
+      max-file-size: 100MB
+      max-request-size: 100MB
 
-# ---------- MyBatis 配置 ----------
 mybatis:
-  mapper-locations: classpath:dao/*.xml  # DAO XML 文件的位置（classpath 下的 dao 目录）
+  mapper-locations: classpath:dao/*.xml
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 将 SQL 日志输出到控制台（方便调试）
-    map-underscore-to-camel-case: true  # 开启下划线转驼峰映射（如 user_id 自动映射为 userId）
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
 
-# ---------- 自定义配置 ----------
-# 文件上传后返回给前端的 URL 前缀
-# 本地开发时使用 localhost，部署到服务器后改为服务器的公网 IP 或域名
 fileBaseUrl: http://localhost:9090
+
+# JWT accessToken
+jwt:
+  secret: "oaj4HKxnulJxql2sw8o6gPe2m3oMzKZJAJezYweNUvRB9yPl5fABVHEbWoAu0za9"
+  expire-ms: 86400000
+
+# RSA（登录/注册/改密密码传输加密，前端用公钥加密，后端私钥解密）
+rsa:
+  private-key: "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyAy+Fb653UKZJc9uZ+yjl9uixH1z/h0BR6bxtCpOvBYJaA5myoTZzl2egTSthEbiIFUuNWXn8/9E9BaRE0Z8B59Tu5JYqaHlICKND/pdHDmEEOBuEJ205U63qxY7FX6WwK+XwQHq7CGsF688a+QCvh4KGgue4LZYFjwgDb24lOAPq3Dq0G8wjmCI+4veLDTVeVUa1ZuD4Y1NpGVQ63cNekw8f6Gm7c3dwTnCjbz5RpDpOpnsIMWRv/ZlOBKPdhxKiwrQkdi1h2ynMPBIAFdhZxR8WiSPErqgIqjZKG82/gJvqvzmt9hiCQEbUyXhEHIZvgJrvGT6c1GDVE9i4LPoRAgMBAAECggEABLSFWclPKvuwfYIItKv5E4UAdwgNcPqd9lxPfPFZ4HcskB0Gv7w3oHwIwumvQxhREJXBgrmx+gA4A10mD6Sbx5TdYbgciP/sbr09tYMh9ACbC13BSm+xWSHPV8SDhs+FpV+vqvdFVzK8g3JNbdjVjg4uosgMgGeCDuEONOsJ1gV26qfPinMmSdxg6tS2ZK5Dun94bOEt09DUL6sYdVnTJgVQlF1TDpDhRVzQJn3p6hHPEcAx0ZYRfGdkX3B6paWOTGLckOJjNGWPddhCO24GThjKip/Y9Q9eGTVUgUSPR+184t4PgtY7qMx3I/p6M5kS18OqGLWXKyNIbCBwqFKafQKBgQDsrsm9h78XvvMQLKwQ3yP0960K9nnq7EokPKQHLtu3jGz/yq0bQrdhgOMbh4HXUD//FTXJ1/wF+1V7Z4ebGmQCr7RBVnhrMdzqwTXp990hJ//Z31ij7j6qsvR2JvfR6TfBbqYeGY+eq9K4nBhc1UVWYPANMOYwIzI7XCwsVTCuVQKBgQDAioyanipGXayae33qWFDJw9fLYLKOOrOLihyvcUXEwmDKGzQTofBjfIEXgv9otRoF3YQdlXUqEfRep6o05PMdQjVcHsyk2N8yFscKe/kPQZG/OWwxOtiZA8YfhI7cnpElzWypNaJdwPsRf96im52Y7x9VkQYJhw1RfRAywgvgzQKBgQCiXAC+SEmZI38foFVkuX20BNcqxwu5UOBHXWX0G3vTvLvk+IapRaoAc+bXMqyqJD3SYR1l2gjjnZb1MX7/sinbAeb4TzYJ6smuLF4sosCJhyPmtGTdB4jrlhlGl9K2p3J8+cdwrH4uDZZe142K2S5YY+UoV1wAt5Q0zjTrMIFVhQKBgADlZCwgClBThUcexgI+MPoPaESxCYOx8D35AZMrcsisouit4bspqMW9wZgLawbguONIGaJNnML6XGnIW/ltC1iag0cPeaJWxAsmofyBgTI5+uSp7r/35yQnKVfiNQv/zOshHp1W+492I3T8ZFvbX4tjqYCrcRzAPSag719dGdMNAoGAa2IjlnTcHAVmjdNSvJ+sS1l9m/QTvnTvNv+W4Aa34TjTApI0mTvQkk3OjZTRGTpgxrN9zA0LcUjzKJ8tDOIzY1gv3ROlpiV8FUE7BRPfR+DJ+Yc2zlAYouiA7zgTBGL7ewMC1d1rY0czMgNT2fgsqkE5KdvDaLJssZLZ2X3EK1g="
+  public-key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsgMvhW+ud1CmSXPbmfso5fbosR9c/4dAUem8bQqTrwWCWgOZsqE2c5dnoE0rYRG4iBVLjVl5/P/RPQWkRNGfAefU7uSWKmh5SAijQ/6XRw5hBDgbhCdtOVOt6sWOxV+lsCvl8EB6uwhrBevPGvkAr4eChoLnuC2WBY8IA29uJTgD6tw6tBvMI5giPuL3iw01XlVGtWbg+GNTaRlUOt3DXpMPH+hpu3N3cE5wo28+UaQ6TqZ7CDFkb/2ZTgSj3YcSosK0JHYtYdspzDwSABXYWcUfFokjxK6oCKo2ShvNv4Cb6r85rfYYgkBG1Ml4RByGb4Ca7xk+nNRg1RPYuCz6EQIDAQAB"

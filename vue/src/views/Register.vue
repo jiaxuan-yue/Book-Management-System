@@ -49,6 +49,7 @@
   import { reactive, ref } from "vue";
   import { User, Lock } from "@element-plus/icons-vue";
   import request from "@/utils/request";
+  import { encryptPassword } from "@/utils/crypto";
   import {ElMessage} from "element-plus";
   import router from "@/router";
 
@@ -84,14 +85,22 @@
   const register = () => {
     formRef.value.validate((valid => {
       if (valid) {
-        // 调用后台的接口
-        request.post('/register', data.form).then(res => {
+        encryptPassword(data.form.password).then(cipher => {
+          const payload = {
+            username: data.form.username,
+            name: data.form.name,
+            password: cipher
+          }
+          return request.post('/register', payload)
+        }).then(res => {
           if (res.code === '200') {
             ElMessage.success("注册成功")
             router.push('/login')
           } else {
             ElMessage.error(res.msg)
           }
+        }).catch(err => {
+          ElMessage.error(err.message || '注册失败')
         })
       }
     })).catch(error => {
