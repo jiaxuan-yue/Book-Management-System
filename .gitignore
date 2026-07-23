@@ -16,6 +16,3 @@ Thumbs.db
 
 # Logs
 *.log
-
-# Local deploy/SSH config with real values (use deploy.config.example)
-deploy.config
