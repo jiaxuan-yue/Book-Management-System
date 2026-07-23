@@ -3,7 +3,7 @@
     <el-form ref="user" :model="data.user" label-width="60px" style="padding: 20px">
       <div style="text-align: center; margin-bottom: 20px">
         <el-upload
-            :action="baseUrl + '/files/upload'"
+            :action="baseUrl + '/files/upload'" :headers="uploadHeaders"
             :on-success="handleFileUpload"
             :show-file-list="false"
             class="avatar-uploader"
@@ -62,9 +62,11 @@
 <script setup>
 import { reactive } from "vue";
 import request from "@/utils/request.js";
+import { authHeaders } from "@/utils/crypto";
 import {ElMessage} from "element-plus";
 
 const baseUrl = import.meta.env.VITE_BASE_URL
+const uploadHeaders = authHeaders()
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
@@ -79,8 +81,9 @@ const loadUser = () => {
   }
   request.get('/user/selectById/' + data.user.id).then(res => {
     if (res.code === '200') {
-      data.user = res.data
-      localStorage.setItem('xm-user', JSON.stringify(res.data))
+      const token = data.user.token
+      data.user = { ...res.data, token }
+      localStorage.setItem('xm-user', JSON.stringify(data.user))
     } else {
       ElMessage.error(res.msg)
     }
@@ -129,8 +132,9 @@ const recharge = () => {
   request.post('/user/recharge', form).then(res => {
     if (res.code === '200') {
       ElMessage.success('充值成功')
-      data.user = res.data
-      localStorage.setItem('xm-user', JSON.stringify(res.data))
+      const token = data.user.token
+      data.user = { ...res.data, token }
+      localStorage.setItem('xm-user', JSON.stringify(data.user))
       data.formVisible = false
       emit('updateUser')
     } else {

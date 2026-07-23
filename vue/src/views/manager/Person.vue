@@ -21,7 +21,7 @@
     <div class="card" style="padding: 30px">
       <el-form :model="data.user" label-width="100px" style="padding-right: 50px">
         <div style="margin: 20px 0; text-align: center">
-          <el-upload :show-file-list="false" class="avatar-uploader" :action="uploadUrl" :on-success="handleFileUpload">
+          <el-upload :show-file-list="false" class="avatar-uploader" :action="uploadUrl" :headers="uploadHeaders" :on-success="handleFileUpload">
             <img v-if="data.user.avatar" :src="data.user.avatar" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
@@ -70,11 +70,13 @@
 
 <script setup>
 import {reactive} from "vue"
-import request from "@/utils/request";
+import request from "@/utils/request"
+import { authHeaders } from "@/utils/crypto";
 import {ElMessage} from "element-plus";
 
 // 文件上传的接口地址
 const uploadUrl = import.meta.env.VITE_BASE_URL + '/files/upload'
+const uploadHeaders = authHeaders()
 
 const data = reactive({
   user: JSON.parse(localStorage.getItem('system-user') || '{}'),
@@ -89,8 +91,9 @@ const loadUser = () => {
   }
   request.get('/user/selectById/' + data.user.id).then(res => {
     if (res.code === '200') {
-      data.user = res.data
-      localStorage.setItem('system-user', JSON.stringify(res.data))
+      const token = data.user.token
+      data.user = { ...res.data, token }
+      localStorage.setItem('system-user', JSON.stringify(data.user))
     } else {
       ElMessage.error(res.msg)
     }
@@ -141,8 +144,9 @@ const recharge = () => {
   request.post('/user/recharge', form).then(res => {
     if (res.code === '200') {
       ElMessage.success('充值成功')
-      data.user = res.data
-      localStorage.setItem('system-user', JSON.stringify(res.data))
+      const token = data.user.token
+      data.user = { ...res.data, token }
+      localStorage.setItem('system-user', JSON.stringify(data.user))
       data.formVisible = false
       emit('updateUser')
     } else {

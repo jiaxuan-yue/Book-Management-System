@@ -37,10 +37,11 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*"); // 1 设置访问源地址（"*" 表示允许所有域名）
-        corsConfiguration.addAllowedHeader("*"); // 2 设置访问源请求头（"*" 表示允许所有请求头）
-        corsConfiguration.addAllowedMethod("*"); // 3 设置访问源请求方法（"*" 表示允许 GET/POST/PUT/DELETE 等）
-        source.registerCorsConfiguration("/**", corsConfiguration); // 4 对接口配置跨域设置（"/**" 匹配所有接口路径）
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addExposedHeader("Authorization");
+        source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }
 }

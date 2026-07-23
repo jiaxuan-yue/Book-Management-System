@@ -41,6 +41,8 @@ public class Account {
     private String newPassword;
     /** 头像 */
     private String avatar;
+    /** JWT accessToken（非数据库字段，登录成功后返回） */
+    private String token;
 
 
     public Integer getId() {
@@ -97,6 +99,14 @@ public class Account {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }

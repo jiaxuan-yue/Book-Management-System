@@ -60,7 +60,7 @@
     <el-dialog title="信息" width="40%" v-model="data.formVisible" :close-on-click-modal="false" destroy-on-close>
       <el-form :model="data.form" label-width="100px" style="padding-right: 50px">
         <el-form-item label="头像" prop="avatar">
-          <el-upload :action="uploadUrl" list-type="picture" :on-success="handleImgSuccess">
+          <el-upload :action="uploadUrl" :headers="uploadHeaders" list-type="picture" :on-success="handleImgSuccess">
             <el-button type="primary">上传图片</el-button>
           </el-upload>
         </el-form-item>
@@ -83,12 +83,14 @@
 </template>
 
 <script setup>
-import request from "@/utils/request";
+import request from "@/utils/request"
+import { authHeaders } from "@/utils/crypto";
 import {reactive} from "vue";
 import {ElMessageBox, ElMessage} from "element-plus";
 
 // 文件上传的接口地址
 const uploadUrl = import.meta.env.VITE_BASE_URL + '/files/upload'
+const uploadHeaders = authHeaders()
 
 const data = reactive({
   pageNum: 1,

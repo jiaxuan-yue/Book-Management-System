@@ -66,7 +66,7 @@
     <el-dialog title="帖子信息" width="50%" v-model="data.formVisible" :close-on-click-modal="false" destroy-on-close>
       <el-form :model="data.form" label-width="100px" style="padding-right: 50px">
         <el-form-item label="封面" prop="img">
-          <el-upload :action="uploadUrl" list-type="picture" :on-success="handleImgSuccess">
+          <el-upload :action="uploadUrl" :headers="uploadHeaders" list-type="picture" :on-success="handleImgSuccess">
             <el-button type="primary">上传封面</el-button>
           </el-upload>
         </el-form-item>
@@ -106,13 +106,15 @@
   </div>
 </template>
 <script setup>
-import request from "@/utils/request";
+import request from "@/utils/request"
+import { authHeaders } from "@/utils/crypto";
 import {onBeforeUnmount, reactive, shallowRef} from "vue";
 import {ElMessageBox, ElMessage} from "element-plus";
 import '@wangeditor/editor/dist/css/style.css'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 const uploadUrl = import.meta.env.VITE_BASE_URL + '/files/upload'
+const uploadHeaders = authHeaders()
 const wangUploadUrl = import.meta.env.VITE_BASE_URL + '/files/wang/upload'
 
 const goFront = () => {
@@ -137,7 +139,8 @@ const mode = 'default'
 const editorConfig = { MENU_CONF: {} }
 editorConfig.MENU_CONF['uploadImage'] = {
   server: wangUploadUrl,
-  fieldName: 'file'
+  fieldName: 'file',
+  headers: authHeaders()
 }
 onBeforeUnmount(() => {
   const editor = editorRef.value

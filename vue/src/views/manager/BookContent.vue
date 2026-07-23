@@ -88,6 +88,7 @@
 
 <script setup>
 import request from "@/utils/request";
+import { authHeaders } from "@/utils/crypto";
 import {onBeforeUnmount, reactive, shallowRef} from "vue";
 import {ElMessageBox, ElMessage} from "element-plus";
 import '@wangeditor/editor/dist/css/style.css'
@@ -116,7 +117,8 @@ const mode = 'default'
 const editorConfig = { MENU_CONF: {} }
 editorConfig.MENU_CONF['uploadImage'] = {
   server: wangUploadUrl,
-  fieldName: 'file'
+  fieldName: 'file',
+  headers: authHeaders()
 }
 onBeforeUnmount(() => {
   const editor = editorRef.value
