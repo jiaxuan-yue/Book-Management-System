@@ -26,6 +26,7 @@ public class CommentsService {
         if (comments.getFid() == null) {
             comments.setFid(0);
         }
+        comments.setContent(com.example.common.HtmlSanitizer.cleanText(comments.getContent()));
         comments.setTime(DateUtil.now());
         commentsMapper.insert(comments);
     }
@@ -41,6 +42,7 @@ public class CommentsService {
      * 修改
      */
     public void updateById(Comments comments) {
+        comments.setContent(com.example.common.HtmlSanitizer.cleanText(comments.getContent()));
         commentsMapper.updateById(comments);
     }
 

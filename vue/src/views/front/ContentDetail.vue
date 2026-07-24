@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin: 30px auto; width: 40%">
-      <div style="border-radius: 5px; padding: 20px 40px; background-color: #faf4e1" v-html="item.content" v-for="item in data.bookContent" :key="item.id"></div>
+      <div style="border-radius: 5px; padding: 20px 40px; background-color: #faf4e1" v-html="sanitizeHtml(item.content)" v-for="item in data.bookContent" :key="item.id"></div>
       <div style="margin-top: 30px">
         <el-pagination @current-change="loadBookContent" background layout="prev, next" prev-text="上一页" next-text="下一页" v-model:page-size="data.pageSize" v-model:current-page="data.pageNum" :total="data.total"/>
       </div>
@@ -10,6 +10,7 @@
 </template>
 <script setup>
 import request from "@/utils/request";
+import { sanitizeHtml } from "@/utils/sanitize";
 import {reactive} from "vue";
 import {ElMessage} from "element-plus";
 import router from "@/router";

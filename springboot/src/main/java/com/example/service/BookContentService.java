@@ -19,6 +19,7 @@ public class BookContentService {
     private BookContentMapper bookContentMapper;
 
     public void add(BookContent bookContent) {
+        bookContent.setContent(com.example.common.HtmlSanitizer.cleanRich(bookContent.getContent()));
         bookContentMapper.insert(bookContent);
     }
 
@@ -27,15 +28,22 @@ public class BookContentService {
     }
 
     public void updateById(BookContent bookContent) {
+        bookContent.setContent(com.example.common.HtmlSanitizer.cleanRich(bookContent.getContent()));
         bookContentMapper.updateById(bookContent);
     }
 
     public BookContent selectById(Integer id) {
-        return bookContentMapper.selectById(id);
+        BookContent content = bookContentMapper.selectById(id);
+        if (content != null) {
+            content.setContent(com.example.common.HtmlSanitizer.cleanRich(content.getContent()));
+        }
+        return content;
     }
 
     public List<BookContent> selectAll(BookContent bookContent) {
-        return bookContentMapper.selectAll(bookContent);
+        List<BookContent> list = bookContentMapper.selectAll(bookContent);
+        list.forEach(item -> item.setContent(com.example.common.HtmlSanitizer.cleanRich(item.getContent())));
+        return list;
     }
 
     public PageInfo<BookContent> selectPage(BookContent bookContent, Integer pageNum, Integer pageSize) {
