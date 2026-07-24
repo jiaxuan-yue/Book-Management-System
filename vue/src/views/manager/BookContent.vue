@@ -81,13 +81,14 @@
     </el-dialog>
 
     <el-dialog title="图书内容" width="50%" v-model="data.viewVisible" :close-on-click-modal="false" destroy-on-close>
-      <div v-html="data.viewContent"></div>
+      <div v-html="sanitizeHtml(data.viewContent)"></div>
     </el-dialog>
   </div>
 </template>
 
 <script setup>
 import request from "@/utils/request";
+import { sanitizeHtml } from "@/utils/sanitize";
 import { authHeaders } from "@/utils/crypto";
 import {onBeforeUnmount, reactive, shallowRef} from "vue";
 import {ElMessageBox, ElMessage} from "element-plus";

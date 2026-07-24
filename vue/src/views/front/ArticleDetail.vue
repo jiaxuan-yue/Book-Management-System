@@ -11,7 +11,7 @@
           <el-button v-if="data.collectFlag" type="danger" size="small" @click="collect">取消收藏</el-button>
           <el-button v-else type="primary" size="small" @click="collect">收藏</el-button>
         </div>
-        <div style="margin-top: 30px" v-html="data.articleData.content"></div>
+        <div style="margin-top: 30px" v-html="sanitizeHtml(data.articleData.content)"></div>
       </div>
 
       <div class="card" style="margin-top: 10px; margin-bottom: 100px; padding: 20px">
@@ -63,6 +63,7 @@
 </template>
 <script setup>
 import request from "@/utils/request";
+import { sanitizeHtml } from "@/utils/sanitize";
 import {reactive} from "vue";
 import {ElMessage} from "element-plus";
 import router from "@/router";

@@ -26,7 +26,7 @@ fileBaseUrl: http://localhost:9090
 
 # JWT accessToken
 jwt:
-  secret: "oaj4HKxnulJxql2sw8o6gPe2m3oMzKZJAJezYweNUvRB9yPl5fABVHEbWoAu0za9"
+  secret: "htEqwfOB6cM6oO7q3sEcUBlvAybHhf38dBuH/f8UdmVHbEgoeAJJNhyO9fw4QBT6"
   expire-ms: 86400000
 
 # RSA（登录/注册/改密密码传输加密，前端用公钥加密，后端私钥解密）

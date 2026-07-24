@@ -12,6 +12,7 @@
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.6.2",
+    "dompurify": "^3.4.12",
     "element-plus": "^2.8.4",
     "jsencrypt": "^3.3.2",
     "sass": "^1.69.5",
